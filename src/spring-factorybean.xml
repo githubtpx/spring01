@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 通过FactoryBean 来配置一个bean 
+		FactoryBean具体返回的对象是由getObject() 方法决定的。
+		该class配置你实际上指向的是一个工厂，具体这个bean到底拿到什么对象，是由工厂里面的getObject方法决定的
+		
+		看到FactroyBean一定要想到getObject方法。
+		
+		
+	
+		 如果我不告诉class中声明的是一个FactroyBean。我们看到这个bean配置以后，
+		 会认为将来这个bean会返回一个CarFactoryBean类型的对象。
+		 但Spring不认为你是一个普通的bean,因为你实现了FactoryBean接口，有血缘关系的。
+			1. 当Spring把这个bean当成一个FactoryBean之后
+			2. 具体我这个bean里面到底返回什么对象呢？
+				就是FactroyBean的getObject()方法的返回值 
+				
+	-->
+	<bean id="car" class="com.atguigu.spring.factorybean.CarFactoryBean">
+		
+	</bean>
+
+
+</beans>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 创建spring工厂/容器的配置文件：
+	 	理解为Spring的IOC容器，因为创建IOC容器对象需要读取该配置文件的 
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<!-- 配置bean对象	 
+			配置方式：  基于xml的方式进行bean配置(Spring是组件化)，在其中使用全类名的方式。
+			<bean>: 受Spring容器管理的javaBean对象。
+				id: <bean> 的唯一标识，在整个IOC容器中中唯一不重复。
+				class: 指定javaBean的全类名。(反射-创建对象)目的通过反射创建bean对象。
+						Class  clazz = Class.forName("com.atguigu.spring.helloWorld.Person")
+						Person person = (Person)clazz.newInstance();  	必须提供无参数构造器！
+						
+				<property>: 给对象的属性赋值
+					name: 指定属性名，指定类中set风格的属性名。
+					
+					value: 指定该属性名的属性值
+	-->
+	
+	
+	<!-- 配置bean,准备要放到IOC容器去管理此对象，class=要Spring管理的javaBean的全类名 -->
+	<bean id="person" class="com.atguigu.spring.helloWorld.Person">
+		<property name="name2"  value="HanMeiMei"></property>
+	</bean> 
+	
+	
+	<bean id="person1" class="com.atguigu.spring.helloWorld.Person">
+		<property name="name2"  value="LiLy"></property>
+	</bean> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</beans>

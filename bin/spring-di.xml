@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+
+	<!-- Spring的IOC容器被创建，该xml中bean被实例化 -->
+
+	<!-- DI依赖注入的方法1：  set方法注入 -->
+	<bean id="car"  class="com.atguigu.spring.di.Car">
+	
+		<!-- set方法注入：property：根据Car类中的set方法，把具体值设置注入到具体属性上 -->
+		<property name="brand" value="奥迪"></property>
+		<property name="crop" value="一汽"></property>
+		<property name="price" value="400000"></property>
+		
+	</bean>
+	
+	
+	
+	<!-- DI依赖注入的方法2：构造器的方式	 
+		index:指定构造器参数的位置
+		type: 指定参数的类型 
+	-->
+	<bean id="car1" class="com.atguigu.spring.di.Car">
+		<constructor-arg value="宝马" index="0" ></constructor-arg>
+		<constructor-arg value="450000" index="2" type="java.lang.Double"></constructor-arg>
+		<constructor-arg value="华晨" index="1"></constructor-arg> 
+	</bean>
+	
+	<!-- Spring实例化bean对象，在使用构造器方式的DI过程中，只能根据你的参数类型去匹配构造器
+		（构造器调用顺序和它声明的顺序有关系，
+				-Car类定义其它方法，除构造器外，末尾定义Spring先获取，倒序获取。
+					相反没有定义其它方法，从头到尾获取。c语言数组实现的。
+				-反射获取的先后顺序可以验证，java底层都是反射做的）
+	 -->
+	<bean id="car2" class="com.atguigu.spring.di.Car">
+		<constructor-arg value="奔驰"></constructor-arg>
+		<constructor-arg value="梅赛德斯" ></constructor-arg>
+		<constructor-arg value="300"></constructor-arg> 
+	</bean>
+
+
+
+	<!-- 使用p命名空间的语法配置bean：底层还是使用Set方式依赖注入DI -->
+	<bean id="car3" class="com.atguigu.spring.di.Car"
+		p:brand="福特"  p:crop="长安"  p:price="30000" p:speed="260" >
+	</bean>
+	
+	
+	<!-- 字面量:来赋值（可以使用字符串表示的值，可以通过value属性或value子节点的方式指定）	 
+		特殊字符：
+			1. 使用实体w3c手册。  &nbsp;（空格）
+					&: &amp;
+					<: &lt;
+					>: &gt;
+					": &quot;
+					': &apos;
+			2.	推荐-特殊语法： <![CDATA[  写任意字符     ]]>	
+					
+			
+	-->
+	<bean id="book" class="com.atguigu.spring.di.Book">
+		<property name="bookId">
+			<value>1001</value>
+		</property>
+		<!-- <property name="bookName" value="&lt;&lt;Java从入门到精通&gt;&gt;" ></property> -->
+		<property name="bookName" >
+			<value><![CDATA[ & ' " > < $ ^ @]]></value>
+		</property>
+		
+	</bean>
+	
+	
+	<!-- IOC容器内部bean对象引用其它的bean  ：ref -->
+	 <bean id="person" class="com.atguigu.spring.di.Person">
+	 	<property name="id" value="101"></property>
+	 	<property name="name" value="宋老师"></property>
+	 	<!-- <property name="car" value="xiaohuangche"></property> -->
+	 	<property name="car" ref="car"></property>
+	 	
+	 	<!-- 给级联属性赋值 -->
+	 	<property name="car.speed" value="270"></property>
+	 </bean>
+	
+	
+	
+	<!-- 内部bean  ： 在整个IOC容器中没有一个能让它引用的bean，但是还想给对象类型的car赋值,使用内部bean专门给car对象赋值 -->
+	<bean id="person1" class="com.atguigu.spring.di.Person">
+		<property name="id" value="102"></property>
+		<property name="name" value="婷姐"></property>
+		<property name="car">
+			<!-- 内部bean，只能在内部使用 -->
+			<bean class="com.atguigu.spring.di.Car">
+				<property name="brand" value="Mini"></property>
+				<property name="crop" value="宝马"></property>
+				<property name="price" value="300000"></property>
+				<property name="speed" value="260"></property>
+			</bean>	
+		</property>
+	</bean>
+	
+
+
+
+	<!-- null值注入 -->
+	<bean id="person2" class="com.atguigu.spring.di.Person">
+		<property name="id" value="103"></property>
+		<property name="name" value="海哥"></property>
+		<!-- <property name="car"></property> -->
+		<property name="car"><null/></property>
+	</bean>
+
+
+		
+	<!-- List集合：List属性进行值的注入问题 -->
+	<bean id="personList" class="com.atguigu.spring.di.PersonList">
+		<property name="name" value="Tom"></property>
+		<property name="cars"  ref="listBean">
+			<!-- 构造一个集合：使用list标签 -->
+			<!-- <list>
+				<bean>   <ref/>
+				<ref bean="car"/>
+				<ref bean="car1"/>
+				<ref bean="car2"/>
+				<bean></bean>
+			</list> -->
+			
+			<!-- <array></array> -->
+			<!-- <set></set> -->
+		</property>
+	</bean>
+	
+	
+	
+	<!-- Map集合：Map属性进行值的注入问题 -->
+	<bean id="personMap" class="com.atguigu.spring.di.PersonMap">
+		<property name="name" value="Jerry"></property>
+		<property name="cars">
+			<!-- 构造map：使用标签  -->
+			<map>
+				<!-- value-ref：也就是我的value也是一个对象，我的去引用，不能通过字面值去写 -->
+				<entry key="AA"  value-ref="car"></entry>
+				<entry key="BB" value-ref="car1"></entry>
+				<entry key="CC" value-ref="car2"></entry>
+					
+			</map>
+		</property>
+	
+	</bean>
+
+ 
+	<!-- 配置集合类型的bean需要引入util名称空间   -->
+
+	<!-- 集合类型Bean -->
+	<util:list id="listBean">
+		<ref bean="car"/>	
+		<ref bean="car1"/>
+		<ref bean="car2" />
+	
+		<!-- <bean></bean> -->
+	</util:list>
+
+
+
+
+
+	
+
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

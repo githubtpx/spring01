@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- bean的继承关系 ：父bean，子bean
+		继承可以从父bean中继承一些配置，但是id  abstract  autowire是不能被继承下来的。
+		
+		abstract="true" 抽象bean，不能被创建对象的。class可以省略不配置。
+			1. 父bean只是作为配置模板，将其设置为abstract的；父bean也可以作为bean实例
+			2. 抽象bean就单纯的做一些通用的配置property，对应其它bean，可以继承这些通用的配置；
+		
+	-->
+	
+	<bean id="address1"   abstract="true">
+		<property name="city" value="北京"></property>
+		<property name="street" value="长安街"></property>
+	</bean>
+	
+	 
+	<!-- 此bean只是继承了address1的bean的通用的配置 -->
+	
+	<bean id="address2"  class="com.atguigu.spring.relation.Address"  parent="address1">
+		<!-- <property name="city" value="北京"></property> -->
+		<property name="street" value="五道口"></property>
+	</bean>
+	
+	
+	
+	<!-- bean依赖关系 -->
+	<bean id="address3" class="com.atguigu.spring.relation.Address" 
+		  parent="address1" depends-on="address4">
+	</bean>
+	
+	<bean id="address4" class="com.atguigu.spring.relation.Address"></bean>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+</beans>
